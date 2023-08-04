@@ -67,9 +67,7 @@ plug "alexherbo2/auto-pairs.kak" config %{
 }
 
 # Install fzf.kak
-plug "andreyorst/fzf.kak" do %{
-    sudo apt install -y fzf
-} config %{
+plug "andreyorst/fzf.kak" config %{
     map global user f %{:fzf-mode<ret>} -docstring "fzf mode"
 } defer fzf %{
     # Ubuntu 20.04 fzf is too old to support preview features (needs --preview-window=\${pos}:+{2}-{/2})
