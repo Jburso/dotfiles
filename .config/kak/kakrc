@@ -6,10 +6,13 @@ addhl -override global/ regex '\h+$' 0:Error
 set global tabstop 4
 set global indentwidth 4
 
-#colorscheme gruvbox
+colorscheme palenight
 
 # Select whole line, not including newline
 map global normal "X" "xH"
+
+# Move to first non-whitespace character in line
+map global normal "^" "x_<a-;>;"
 
 # Make ctags easier
 map global normal <c-]> <a-i>w:ctags-search<ret>
@@ -19,8 +22,8 @@ map global normal "#" ": comment-line<ret>" -docstring "comment line"
 map global normal "<a-#>" ": comment-block<ret>" -docstring "comment block"
 
 # Copy/paste to/from clipboard
-map global user "c" "<a-|> xclip -selection clipboard -in<ret>" -docstring "copy to clipboard"
-map global user "p" "<!> xclip -selection clipboard -out<ret>" -docstring "paste from clipboard"
+map global user "c" "<a-|> pbcopy <ret>" -docstring "copy to clipboard"
+map global user "p" "<!> pbpaste<ret>" -docstring "paste from clipboard"
 
 # Use ripgrep for searching files
 set-option current grepcmd "rg --line-number --no-heading"
@@ -48,7 +51,7 @@ evaluate-commands %sh{
     plugins="$kak_config/plugins"
 	if [ ! -e "$autoload" ]; then
 	    mkdir -p "$autoload"
-		ln -s /usr/share/kak/autoload "$autoload/default"
+		ln -s /usr/local/share/kak/autoload "$autoload/default"
 	fi
 	if [ ! -e "$plugins" ]; then
         mkdir -p "$plugins"
@@ -67,7 +70,9 @@ plug "alexherbo2/auto-pairs.kak" config %{
 }
 
 # Install fzf.kak
-plug "andreyorst/fzf.kak" config %{
+plug "andreyorst/fzf.kak" do %{
+    sudo apt install -y fzf
+} config %{
     map global user f %{:fzf-mode<ret>} -docstring "fzf mode"
 } defer fzf %{
     # Ubuntu 20.04 fzf is too old to support preview features (needs --preview-window=\${pos}:+{2}-{/2})
@@ -77,4 +82,21 @@ plug "andreyorst/fzf.kak" config %{
     set-option global fzf_grep_command rg
     # Set this to true if on >= 22.04
     set-option global fzf_grep_preview false
+}
+
+plug "kak-lsp/kak-lsp" do %{
+    cargo install --locked --force --path .
+    # optional: if you want to use specific language servers
+    mkdir -p ~/.config/kak-lsp
+    cp -n kak-lsp.toml ~/.config/kak-lsp/
+} config %{
+    map global user l %{:enter-user-mode lsp<ret>} -docstring "LSP mode"
+}
+
+hook global WinSetOption filetype=(rust) %{
+    lsp-enable-window
+    lsp-inlay-hints-enable global
+    lsp-inlay-diagnostics-enable global
+    lsp-inline-diagnostics-enable global
+    # lsp-auto-hover-enable
 }
