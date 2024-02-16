@@ -1,102 +1,82 @@
-## BUILTIN CONFIGURATION
-
-addhl -override global/ number-lines -relative
-addhl -override global/ regex '\h+$' 0:Error
-
-set global tabstop 4
-set global indentwidth 4
+# Make sure required CLI commands are installed
+# ──────────────
+require-module check_required_cli_commands
 
 colorscheme palenight
 
+# Symlink system autoload config
+# ───────────────────────────────
+evaluate-commands %sh{
+    autoload="$kak_config/autoload"
+	if [ ! -e "$autoload/default" ]; then
+	    mkdir -p "$autoload"
+		ln -s /usr/local/share/kak/autoload "$autoload/default"
+	fi
+}
+
+# Highlighters
+# ════════════
+add-highlighter -override global/ number-lines -relative
+add-highlighter -override global/ regex '\h+$' 0:Error
+
+# Options
+# ═══════
+
+# Use ripgrep for searching files
+# ───────────────────────────────
+set-option -add global required_cli_commands "rg"
+set-option current grepcmd "rg --line-number --no-heading"
+
+# Set desired tabs/indent widths
+# ──────────────
+set-option global tabstop 4
+set-option global indentwidth 4
+
+# Mappings
+# ════════
+
 # Select whole line, not including newline
+# ────────────────────────────────────────
 map global normal "X" "xH"
 
-# Move to first non-whitespace character in line
-map global normal "^" "x_<a-;>;"
-
 # Make ctags easier
+# ─────────────────
 map global normal <c-]> <a-i>w:ctags-search<ret>
 
 # Making commenting easier
+# ────────────────────────
 map global normal "#" ": comment-line<ret>" -docstring "comment line"
 map global normal "<a-#>" ": comment-block<ret>" -docstring "comment block"
 
 # Copy/paste to/from clipboard
-map global user "c" "<a-|> pbcopy <ret>" -docstring "copy to clipboard"
-map global user "p" "<!> pbpaste<ret>" -docstring "paste from clipboard"
+# ────────────────────────────
+# map global user "c" "<a-|> pbcopy <ret>" -docstring "copy to clipboard"
+# map global user "p" "<!> pbpaste<ret>" -docstring "paste from clipboard"
 
-# Use ripgrep for searching files
-set-option current grepcmd "rg --line-number --no-heading"
-
-# Search for ctags file in parent directories, until you hit $HOME
-hook global KakBegin .* %{
-    evaluate-commands %sh{
-        path="$PWD"
-        while [ "$path" != "$HOME" ] && [ "$path" != "/" ]; do
-            if [ -e "./tags" ]; then
-                printf "%s\n" "set-option -add current ctagsfiles %{$path/tags}"
-                break
-            else
-                cd ..
-                path="$PWD"
-            fi
-        done
-    }
-}
-
-## PLUGIN CONFIGURATION
-# Initialize autoload and plugin dirctories
+# System clipboard handling
+# ─────────────────────────
 evaluate-commands %sh{
-    autoload="$kak_config/autoload"
-    plugins="$kak_config/plugins"
-	if [ ! -e "$autoload" ]; then
-	    mkdir -p "$autoload"
-		ln -s /usr/local/share/kak/autoload "$autoload/default"
-	fi
-	if [ ! -e "$plugins" ]; then
-        mkdir -p "$plugins"
-		git -C "$plugins/" clone -q https://github.com/andreyorst/plug.kak.git
+    if [ -n "$SSH_TTY" ]; then
+        copy='printf "\033]52;;%s\033\\" $(base64 | tr -d "\n") > $( [ -n "$kak_client_pid" ] && echo /proc/$kak_client_pid/fd/0 || echo /dev/tty )'
+        paste='printf "paste unsupported through ssh"'
+        backend="OSC 52"
+    else
+        case $(uname) in
+            Linux)
+                if [ -n "$WAYLAND_DISPLAY" ]; then
+                    copy="wl-copy -p"; paste="wl-paste -p"; backend=Wayland
+                else
+                    copy="xclip -i"; paste="xclip -o"; backend=X11
+                fi
+                ;;
+            Darwin)  copy="pbcopy"; paste="pbpaste"; backend=OSX ;;
+        esac
     fi
-    printf "%s\n" "source '$plugins/plug.kak/rc/plug.kak'"
-}
-set-option current plug_git_domain "https://github.com/"
 
-# Install plug.kak
-plug "andreyorst/plug.kak" noload
-
-# Install autopairs.kak
-plug "alexherbo2/auto-pairs.kak" config %{
-    enable-auto-pairs
-}
-
-# Install fzf.kak
-plug "andreyorst/fzf.kak" do %{
-    sudo apt install -y fzf
-} config %{
-    map global user f %{:fzf-mode<ret>} -docstring "fzf mode"
-} defer fzf %{
-    # Ubuntu 20.04 fzf is too old to support preview features (needs --preview-window=\${pos}:+{2}-{/2})
-    # Set this to true if on >= 22.04
-    set-option current fzf_preview false
-} defer fzf-grep %{
-    set-option global fzf_grep_command rg
-    # Set this to true if on >= 22.04
-    set-option global fzf_grep_preview false
-}
-
-plug "kak-lsp/kak-lsp" do %{
-    cargo install --locked --force --path .
-    # optional: if you want to use specific language servers
-    mkdir -p ~/.config/kak-lsp
-    cp -n kak-lsp.toml ~/.config/kak-lsp/
-} config %{
-    map global user l %{:enter-user-mode lsp<ret>} -docstring "LSP mode"
-}
-
-hook global WinSetOption filetype=(rust) %{
-    lsp-enable-window
-    lsp-inlay-hints-enable global
-    lsp-inlay-diagnostics-enable global
-    lsp-inline-diagnostics-enable global
-    # lsp-auto-hover-enable
+    printf "map global user -docstring 'paste (after) from clipboard' p '<a-!>%s<ret>'\n" "$paste"
+    printf "map global user -docstring 'paste (before) from clipboard' P '!%s<ret>'\n" "$paste"
+    printf "map global user -docstring 'yank to primary' y '<a-|>%s<ret>:echo -markup %%{{Information}copied selection to %s primary}<ret>'\n" "$copy" "$backend"
+    printf "map global user -docstring 'yank to clipboard' Y '<a-|>%s<ret>:echo -markup %%{{Information}copied selection to %s clipboard}<ret>'\n" "$copy -selection clipboard" "$backend"
+    printf "map global user -docstring 'replace from clipboard' R '|%s<ret>'\n" "$paste"
+    printf "define-command -override echo-to-clipboard -params .. %%{ echo -to-shell-script '%s' -- %%arg{@} }" "$copy"
 }
