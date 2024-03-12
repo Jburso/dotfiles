@@ -13,7 +13,7 @@ hook global NormalIdle .* %{
     } }
 }
 # Search for ctags file in parent directories, until you hit $HOME
-# ════════════════════════════════════════════════════════════════
+# ────────────────────────────────────────────────────────────────
 hook global KakBegin .* %{
     evaluate-commands %sh{
         path="$PWD"

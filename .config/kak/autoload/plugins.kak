@@ -2,10 +2,10 @@
 # ═══════
 
 # Make sure we can check required cli commands before loading anything
-hook global ModuleLoaded check_required_cli_commands %{
+hook global ModuleLoaded check_cli_commands %{
 
 # Initialize autoload and plugin directories
-# ─────────────────────────────────────────
+# ──────────────────────────────────────────
 set-option -add global required_cli_commands "git"
 declare-option -hidden str git_domain "https://github.com"
 
@@ -22,7 +22,7 @@ evaluate-commands %sh{
 set-option current plug_git_domain opt%{git_domain}
 
 # Install and configure all plugins
-# ─────────────────────────────────────────
+# ─────────────────────────────────
 plug "andreyorst/plug.kak" noload
 
 plug "alexherbo2/auto-pairs.kak" config %{

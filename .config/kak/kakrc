@@ -1,6 +1,6 @@
 # Make sure required CLI commands are installed
-# ──────────────
-require-module check_required_cli_commands
+# ─────────────────────────────────────────────
+require-module check_cli_commands
 
 colorscheme palenight
 
@@ -15,12 +15,9 @@ evaluate-commands %sh{
 }
 
 # Highlighters
-# ════════════
+# ────────────
 add-highlighter -override global/ number-lines -relative
 add-highlighter -override global/ regex '\h+$' 0:Error
-
-# Options
-# ═══════
 
 # Use ripgrep for searching files
 # ───────────────────────────────
@@ -28,12 +25,9 @@ set-option -add global required_cli_commands "rg"
 set-option current grepcmd "rg --line-number --no-heading"
 
 # Set desired tabs/indent widths
-# ──────────────
+# ──────────────────────────────
 set-option global tabstop 4
 set-option global indentwidth 4
-
-# Mappings
-# ════════
 
 # Select whole line, not including newline
 # ────────────────────────────────────────
@@ -47,11 +41,6 @@ map global normal <c-]> <a-i>w:ctags-search<ret>
 # ────────────────────────
 map global normal "#" ": comment-line<ret>" -docstring "comment line"
 map global normal "<a-#>" ": comment-block<ret>" -docstring "comment block"
-
-# Copy/paste to/from clipboard
-# ────────────────────────────
-# map global user "c" "<a-|> pbcopy <ret>" -docstring "copy to clipboard"
-# map global user "p" "<!> pbpaste<ret>" -docstring "paste from clipboard"
 
 # System clipboard handling
 # ─────────────────────────
