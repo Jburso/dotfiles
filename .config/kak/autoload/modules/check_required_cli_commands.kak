@@ -1,6 +1,6 @@
-# Check if required and preferred cli commands are installed.
-# All commands added to required_cli_commands and preferred_cli_commands
-# will be checked after all configuration files are read.
+# Check if required  cli commands are installed.
+# All commands added to required_cli_commands will be
+# checked after all configuration files are read.
 #
 # Make sure to use a hook on ModuleLoaded if not in kakrc
 # Usage:
@@ -10,14 +10,13 @@
 #   -or-
 #
 #   hook global ModuleLoaded check_cli_commands %{
-#       set-option -add preferred_cli_commands "ripgrep"
+#       set-option -add required_cli_commands "ripgrep"
 #   }
 # ══════════════════════════════════════════════════════════════════════════
 
 provide-module check_cli_commands %{
     # Commands that are required
     declare-option -docstring 'Required CLI commands' str-list required_cli_commands
-    declare-option -docstring 'Preferred CLI commands' str-list preferred_cli_commands
     declare-option -hidden -docstring 'User notification for commands that are not installed' str-list cli_commands_output
 
     # Performs the check
@@ -40,7 +39,8 @@ provide-module check_cli_commands %{
     }}
 
     # Automatically check commands after kak is done loading config
-    # KakBegin does not propogate fail or info commands
+    # KakBegin doesn't propogate fail or info commands
+    # so we use ClientCreate instead.
     hook -once global ClientCreate .* %{
         try %{
             check_cli_commands

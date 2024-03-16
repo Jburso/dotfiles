@@ -12,6 +12,7 @@ hook global NormalIdle .* %{
         add-highlighter -override global/curword group
     } }
 }
+
 # Search for ctags file in parent directories, until you hit $HOME
 # ────────────────────────────────────────────────────────────────
 hook global KakBegin .* %{

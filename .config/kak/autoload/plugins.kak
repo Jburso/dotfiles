@@ -30,6 +30,7 @@ plug "alexherbo2/auto-pairs.kak" config %{
 }
 
 set-option -add global required_cli_commands "fzf"
+set-option -add global required_cli_commands "rg"
 plug "andreyorst/fzf.kak" config %{
     map global user f %{:fzf-mode<ret>} -docstring "fzf mode"
 } defer fzf %{
@@ -45,10 +46,13 @@ plug "andreyorst/fzf.kak" config %{
 }
 
 set-option -add global required_cli_commands "cargo"
-plug "kak-lsp/kak-lsp" do %{
+plug "kakoune-lsp/kakoune-lsp" do %{
     cargo install --locked --force --path .
     mkdir -p ~/.config/kak-lsp
     cp -n kak-lsp.toml ~/.config/kak-lsp/
+} config %{
+    # Uncomment to enable debugging
+    # set global lsp_cmd "kak-lsp -s %val{session} -vvv --log /tmp/kak-lsp.log"
 }
 
 set-option -add global required_cli_commands "cargo"
