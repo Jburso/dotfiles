@@ -8,10 +8,10 @@ colorscheme palenight
 # ───────────────────────────────
 evaluate-commands %sh{
     autoload="$kak_config/autoload"
-	if [ ! -e "$autoload/default" ]; then
-	    mkdir -p "$autoload"
-		ln -s /usr/local/share/kak/autoload "$autoload/default"
-	fi
+        if [ ! -e "$autoload/default" ]; then
+            mkdir -p "$autoload"
+            ln -s "$kak_runtime/autoload" "$autoload/default"
+        fi
 }
 
 # Highlighters
