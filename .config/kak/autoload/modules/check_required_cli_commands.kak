@@ -23,11 +23,11 @@ provide-module check_cli_commands %{
     define-command -docstring 'Check if required CLI commands are installed' check_cli_commands %{ eval %sh{
         not_found=""
 
-        while read -r cli_command; do
+        for cli_command in $kak_opt_required_cli_commands; do
             if ! command -v "$cli_command" > /dev/null; then
                 not_found="${not_found:+${not_found}, }${cli_command}"
             fi
-        done <<< "$(echo "$kak_opt_required_cli_commands" | tr ' ' '\n')"
+        done
 
         if [ -n "$not_found" ]; then
             output=$(printf 'Install the following required programs and make them available in your $PATH: %s' "$not_found")
