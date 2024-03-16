@@ -19,7 +19,7 @@ evaluate-commands %sh{
 }
 
 # Must be set after sourcing plug.kak
-set-option current plug_git_domain opt%{git_domain}
+set-option current plug_git_domain %opt{git_domain}
 
 # Install and configure all plugins
 # ─────────────────────────────────
