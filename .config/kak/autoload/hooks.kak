@@ -13,6 +13,12 @@ hook global NormalIdle .* %{
     } }
 }
 
+# Set YAML indent width to 2
+# ────────────────────────────────────────────────────────────────
+hook global WinSetOption filetype=yaml %{
+    set buffer indentwidth 2
+}
+
 # Search for ctags file in parent directories, until you hit $HOME
 # ────────────────────────────────────────────────────────────────
 hook global KakBegin .* %{
