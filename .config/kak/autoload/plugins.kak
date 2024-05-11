@@ -38,6 +38,7 @@ plug "andreyorst/fzf.kak" config %{
     # Set this to true if on >= 22.04
     set-option global fzf_preview true
     set-option global fzf_tmux_popup true
+    set-option global fzf_tmux_height 75%
     set-option global fzf_tmux_popup_width 80%
 } defer fzf-grep %{
     set-option global fzf_grep_command rg
