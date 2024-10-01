@@ -2,8 +2,6 @@
 # ─────────────────────────────────────────────
 require-module check_cli_commands
 
-colorscheme palenight
-
 # Symlink system autoload config
 # ───────────────────────────────
 evaluate-commands %sh{
@@ -69,3 +67,4 @@ evaluate-commands %sh{
     printf "map global user -docstring 'replace from clipboard' R '|%s<ret>'\n" "$paste"
     printf "define-command -override echo-to-clipboard -params .. %%{ echo -to-shell-script '%s' -- %%arg{@} }" "$copy"
 }
+
