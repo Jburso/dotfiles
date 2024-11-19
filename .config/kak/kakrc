@@ -8,7 +8,7 @@ evaluate-commands %sh{
     autoload="$kak_config/autoload"
         if [ ! -e "$autoload/default" ]; then
             mkdir -p "$autoload"
-            ln -s "$kak_runtime/autoload" "$autoload/default"
+            ln -fs "$kak_runtime/autoload" "$autoload/default"
         fi
 }
 
