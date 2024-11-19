@@ -1,1 +1,22 @@
 theme = "base16_transparent"
+
+[editor]
+line-number = "relative"
+
+[keys.normal]
+
+# Extend like Kakoune
+x = "extend_to_line_bounds"
+X = "extend_line_below"
+
+B = "extend_prev_word_start"
+A-B = "extend_prev_long_word_start"
+E = "extend_next_word_end"
+A-E = "extend_next_long_word_end"
+W = "extend_next_word_start"
+A-W = "extend_next_long_word_start"
+
+J = "extend_visual_line_down"
+K = "extend_visual_line_up"
+L = "extend_char_right"
+H = "extend_char_left"
