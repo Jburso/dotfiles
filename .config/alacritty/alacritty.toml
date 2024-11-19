@@ -1,0 +1,11 @@
+#import = ["/home/jack/.config/alacritty/palenight.toml"]
+
+[font]
+size = 10.0
+
+[window]
+option_as_alt = "OnlyLeft"
+
+[shell]
+program = "tmux"
+
