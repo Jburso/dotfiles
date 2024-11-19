@@ -7,7 +7,7 @@ The following branches are currently maintained and are subject to change:
 
 - `base` - Base configuration for all other configurations.
 
-## Installing
+## Install
 If you are interested in just taking a look at the repository, a normal `git clone` will suffice.
 However, if you want to install the dotfiles, use the following commands:
 
@@ -40,4 +40,12 @@ Examples:
 Run `kak`, install all required cli commands, then install the plugins with:
 ```
 :plug-install
+```
+
+## Uninstall
+Run the uninstall script in the readme branch, assuming the bare repo was cloned to $HOME/.dotfiles.
+The dotfiles repo and all configuration files will be removed.
+```
+git dotfiles switch readme
+~/.uninstall_dotfiles.sh
 ```
