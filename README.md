@@ -13,14 +13,14 @@ However, if you want to install the dotfiles, use the following commands:
 
 ### Clone the .git directory as a subdirectory
 ```
-git clone --bare <repo-url> $HOME/.dotfiles
+git clone --bare <repo-url> ~/.dotfiles
 ```
 
 ### Install the dotfiles
 ```
-git config --global alias.dotfiles '!git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME' # Specify where the .git is and where to checkout to
-git --git-dir=$HOME/.dotfiles/ config --local status.showUntrackedFiles no             # Don't flood status with all of $HOME
-git dotfiles checkout                                                                  # Checkout the dotfiles
+git config --global alias.dotfiles '!git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME"' # Specify where the .git is and where to checkout to
+git --git-dir="$HOME/.dotfiles" config --local status.showUntrackedFiles no               # Don't flood status with all of $HOME
+git dotfiles checkout                                                                      # Checkout the dotfiles
 ```
 
 ### Switch to the desired branch
