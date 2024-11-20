@@ -43,7 +43,7 @@ Run `kak`, install all required cli commands, then install the plugins with:
 ```
 
 ## Uninstall
-Run the uninstall script in the readme branch, assuming the bare repo was cloned to $HOME/.dotfiles.
+Run the uninstall script in the readme branch, assuming the bare repo was cloned to ~/.dotfiles.
 The dotfiles repo and all configuration files will be removed.
 ```
 git dotfiles switch readme
