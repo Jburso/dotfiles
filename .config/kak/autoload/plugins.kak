@@ -91,4 +91,19 @@ plug "phaazon/hop.kak" do %{
 # ────────────
 plug "occivink/kakoune-find"
 
+# kak-tree-sitter
+# ───────────────
+plug "https://git.sr.ht/~hadronized/kak-tree-sitter" do %{
+    cargo install --locked --force --path kak-tree-sitter
+    cargo install --locked --force --path ktsctl
+} config %{
+    eval %sh{ kak-tree-sitter -dks --init $kak_session }
+} noload
+
+# Grab some tree-sitter enabled kakoune themes
+plug "https://git.sr.ht/~hadronized/kakoune-tree-sitter-themes" theme config %{
+    colorscheme catppuccin_mocha
 }
+
+} # End of check_cli_commands hook
+
