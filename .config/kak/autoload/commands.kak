@@ -25,27 +25,6 @@ define-command newv -params .. -docstring 'newv [<commands>]: create a new verti
     }
 }
 
-# Start LSP with default configuration
-# ────────────────────────────────────
-
-# It looks like eval%sh{kak-lsp} needs to be run on Kakoune startup,
-# before the buffer opens, in order for the lsp_language_id hooks
-# to run. What's written below unfortunately won't work due to this.
-# Check back later to see if this gets fixed. 
-
-# define-command custom-lsp -docstring 'lsp: start LSP with default configuration' %{
-#     eval %sh{kak-lsp}
-#     map global user l %{:enter-user-mode lsp<ret>} -docstring "LSP mode"
-#     hook global WinSetOption filetype=(rust|c|cpp) %{
-#         echo -debug "here"
-#         lsp-enable-window
-#         lsp-inlay-hints-enable global
-#         lsp-inlay-diagnostics-enable global
-#         lsp-inline-diagnostics-enable global
-#     }
-
-# }
-
 # Set up an IDE-like environment
 # ──────────────────────────────
 define-command ide -params 0..1 -docstring '[session-name]: Turn Kakoune into an IDE' %{

@@ -21,14 +21,18 @@ evaluate-commands %sh{
 # Must be set after sourcing plug.kak
 set-option current plug_git_domain %opt{git_domain}
 
-# Install and configure all plugins
-# ─────────────────────────────────
+# plug.kak
+# ────────
 plug "andreyorst/plug.kak" noload
 
+# auto-pairs.kak
+# ──────────────
 plug "alexherbo2/auto-pairs.kak" config %{
     enable-auto-pairs
 }
 
+# fzf.kak
+# ───────
 set-option -add global required_cli_commands "fzf"
 set-option -add global required_cli_commands "rg"
 plug "andreyorst/fzf.kak" config %{
@@ -46,11 +50,29 @@ plug "andreyorst/fzf.kak" config %{
     set-option global fzf_grep_preview true
 }
 
+# kakoune-lsp
+# ───────────
 set-option -add global required_cli_commands "cargo"
 plug "kakoune-lsp/kakoune-lsp" do %{
     cargo install --locked --force --path .
+} config %{
+    eval %sh{kak-lsp}
+    lsp-enable
+
+    map global user l ':enter-user-mode lsp<ret>' -docstring 'LSP mode'
+
+    map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
+
+    map global object a '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
+    map global object <a-a> '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
+    map global object f '<a-semicolon>lsp-object Function Method<ret>' -docstring 'LSP function or method'
+    map global object t '<a-semicolon>lsp-object Class Interface Struct<ret>' -docstring 'LSP class interface or struct'
+    map global object d '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
+    map global object D '<a-semicolon>lsp-diagnostic-object<ret>' -docstring 'LSP errors'
 } noload
 
+# hop.kak
+# ───────
 set-option -add global required_cli_commands "cargo"
 plug "phaazon/hop.kak" do %{
     cargo install --locked --force --path .
@@ -65,6 +87,8 @@ plug "phaazon/hop.kak" do %{
     map global user h %{:hop-kak-words<ret>} -docstring "hop to word"
 }
 
+# kakoune-find
+# ────────────
 plug "occivink/kakoune-find"
 
 }
