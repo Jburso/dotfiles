@@ -14,7 +14,7 @@ hook global NormalIdle .* %{
 }
 
 # Set YAML indent width to 2
-# ────────────────────────────────────────────────────────────────
+# ──────────────────────────
 hook global WinSetOption filetype=yaml %{
     set buffer indentwidth 2
 }
