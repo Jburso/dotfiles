@@ -69,6 +69,10 @@ plug "kakoune-lsp/kakoune-lsp" do %{
     map global object t '<a-semicolon>lsp-object Class Interface Struct<ret>' -docstring 'LSP class interface or struct'
     map global object d '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
     map global object D '<a-semicolon>lsp-diagnostic-object<ret>' -docstring 'LSP errors'
+
+    lsp-inlay-hints-enable global
+    lsp-inlay-diagnostics-enable global
+
 } noload
 
 # hop.kak
