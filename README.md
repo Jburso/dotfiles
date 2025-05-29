@@ -5,7 +5,8 @@ The default branch contains only this README.
 Different branches represent configurations that are incompatible with each other.
 The following branches are currently maintained and are subject to change:
 
-- `base` - Base configuration for all other configurations.
+- `base` - Common base config.
+- `mac`  - macOS config.
 
 ## Install
 `curl` the install script and pipe to `sh`. Verify the script before running
