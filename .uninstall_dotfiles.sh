@@ -1,6 +1,7 @@
 #!/bin/sh
 
 DOTFILES_GIT="$HOME/.dotfiles"
+: "${DOTFILES_GIT_ALIAS=df}"
 
 usage() {
   printf "$0 [path_to_dotfiles_git]\n"
@@ -17,18 +18,20 @@ if [ $# -eq 1  ]; then
   fi
 fi
 
-if [ ! -d $DOTFILES_GIT ]; then
-  printf "Are the dotfiles installed? $DOTFILES_GIT does not exist.\n" > /dev/stderr
+if [ ! -d "$DOTFILES_GIT" ]; then
+  printf "Are the dotfiles installed? "$DOTFILES_GIT" does not exist.\n" > /dev/stderr
   usage 255
 fi
 
 set -e
 
 # Remove all checked out files
-git dotfiles ls-tree --full-tree --name-only HEAD | xargs rm -rf
+cd "$HOME"
+git "$DOTFILES_GIT_ALIAS" ls-tree --full-tree --name-only HEAD | xargs rm -rf
+cd - >/dev/null
 
 # Unset git dotfiles alias
 git config --global --unset alias.dotfiles
 
 # Remove dotfiles git directory
-rm -rf $DOTFILES_GIT
+rm -rf "$DOTFILES_GIT"
