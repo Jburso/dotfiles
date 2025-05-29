@@ -8,31 +8,17 @@ The following branches are currently maintained and are subject to change:
 - `base` - Base configuration for all other configurations.
 
 ## Install
-If you are interested in just taking a look at the repository, a normal `git clone` will suffice.
-However, if you want to install the dotfiles, use the following commands:
-
-### Clone the .git directory as a subdirectory
+`curl` the install script and pipe to `sh`. Verify the script before running
 ```
-git clone --bare <repo-url> ~/.dotfiles
+curl --proto '=https' -LSsf https://dotfiles.jburso.com | sh
 ```
 
-### Install the dotfiles
-```
-git config --global alias.dotfiles '!git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME"' # Specify where the .git is and where to checkout to
-git --git-dir="$HOME/.dotfiles" config --local status.showUntrackedFiles no               # Don't flood status with all of $HOME
-git dotfiles checkout                                                                      # Checkout the dotfiles
-```
-
-### Switch to the desired branch
-```
-git dotfiles switch <branch_name>
-```
-To interact with the dotfiles git, prefix all commands with `git dotfiles`.
+To interact with the dotfiles git, prefix all commands with `git df`.
 
 Examples:
-- `git dotfiles switch base`
-- `git dotfiles status`
-- `git dotfiles log`
+- `git df switch base`
+- `git df status`
+- `git df log`
 
 ## Configuration Documentation
 
@@ -43,9 +29,9 @@ Run `kak`, install all required cli commands, then install the plugins with:
 ```
 
 ## Uninstall
-Run the uninstall script in the readme branch, assuming the bare repo was cloned to ~/.dotfiles.
+Run the uninstall script in the readme branch, assuming the bare repo was cloned to `~/.dotfiles`.
 The dotfiles repo and all configuration files will be removed.
 ```
-git dotfiles switch readme
+git df switch readme
 ~/.uninstall_dotfiles.sh
 ```
